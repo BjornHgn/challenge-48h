@@ -1,0 +1,614 @@
+/* Clean and seamless 404 page styling with improved spacing */
+
+/* Base container */
+.not-found-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #f8f9fa 0%, #e7f4fb 100%);
+  padding: 2.5rem;
+  font-family: 'Montserrat', sans-serif;
+  color: #444;
+  line-height: 1.6;
+}
+
+.not-found-content {
+  max-width: 750px;
+  width: 100%;
+  text-align: center;
+  animation: fadeIn 0.8s ease-out;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 177, 235, 0.08);
+  backdrop-filter: blur(5px);
+}
+
+/* Illustration container - better proportions */
+.not-found-illustration {
+  height: 260px;
+  margin: 0 auto 2.5rem;
+  position: relative;
+  overflow: hidden;
+  max-width: 500px;
+}
+
+.not-found-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Road styles - cleaner appearance */
+.not-found-road {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: #ccc;
+  z-index: 1;
+}
+
+.not-found-road:before {
+  content: "";
+  position: absolute;
+  top: -1.5px;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: repeating-linear-gradient(90deg, #ddd, #ddd 10px, transparent 10px, transparent 20px);
+  opacity: 0.4;
+  animation: roadMove 5s linear infinite;
+}
+
+/* 404 Road Signs - better spacing and subtle animation */
+.road-sign {
+  position: absolute;
+  bottom: 0px;
+  background-color: #00b1eb;
+  color: white;
+  font-size: 44px;
+  font-weight: 700;
+  width: 56px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  animation: signBounce 3.5s ease-in-out infinite;
+  letter-spacing: -1px;
+}
+
+.road-sign-4-left {
+  left: 22%;
+  animation-delay: 0s;
+}
+
+.road-sign-0 {
+  left: 50%;
+  transform: translateX(-50%);
+  animation-delay: 0.2s;
+}
+
+.road-sign-4-right {
+  right: 22%;
+  animation-delay: 0.4s;
+}
+
+/* Bicycle container - more centered */
+.not-found-bicycle {
+  position: absolute;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 170px;
+  height: 100px;
+  z-index: 3;
+  animation: bicycleMove 1.2s ease-in-out infinite alternate;
+}
+
+/* Bicycle shadow - softer */
+.bicycle-shadow {
+  position: absolute;
+  width: 150px;
+  height: 8px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0) 70%);
+  bottom: -5px;
+  left: 10px;
+  border-radius: 50%;
+  z-index: 0;
+  animation: shadowMove 1.2s ease-in-out infinite alternate;
+}
+
+/* Bicycle wheels - cleaner style */
+.bicycle-wheel {
+  position: absolute;
+  width: 46px;
+  height: 46px;
+  bottom: 0;
+  z-index: 2;
+}
+
+.bicycle-wheel-left {
+  left: 12px;
+}
+
+.bicycle-wheel-right {
+  right: 12px;
+}
+
+.wheel-tire {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 4px solid #333;
+  box-sizing: border-box;
+  animation: wheelRotate 2s linear infinite;
+}
+
+.wheel-spokes {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  animation: wheelRotate 2s linear infinite;
+}
+
+.wheel-spokes:before, .wheel-spokes:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 36px;
+  height: 2px;
+  background-color: #333;
+  transform-origin: left center;
+}
+
+.wheel-spokes:before {
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.wheel-spokes:after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.wheel-hub {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #00b1eb;
+  border: 2px solid #333;
+  z-index: 3;
+}
+
+/* Bicycle frame - improved proportions */
+.bicycle-frame {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.frame-top-tube {
+  position: absolute;
+  width: 75px;
+  height: 5px;
+  background-color: #00b1eb;
+  top: 30px;
+  left: 48px;
+  transform: rotate(-10deg);
+  border-radius: 3px;
+}
+
+.frame-down-tube {
+  position: absolute;
+  width: 85px;
+  height: 5px;
+  background-color: #00b1eb;
+  top: 30px;
+  left: 48px;
+  transform-origin: left center;
+  transform: rotate(45deg);
+  border-radius: 3px;
+}
+
+.frame-seat-tube {
+  position: absolute;
+  width: 55px;
+  height: 5px;
+  background-color: #00b1eb;
+  bottom: 40px;
+  left: 82px;
+  transform-origin: bottom center;
+  transform: rotate(-75deg);
+  border-radius: 3px;
+}
+
+.frame-seat-stay {
+  position: absolute;
+  width: 48px;
+  height: 4px;
+  background-color: #00b1eb;
+  bottom: 35px;
+  right: 35px;
+  transform-origin: right bottom;
+  transform: rotate(-40deg);
+  border-radius: 2px;
+}
+
+.frame-chain-stay {
+  position: absolute;
+  width: 62px;
+  height: 4px;
+  background-color: #00b1eb;
+  bottom: 25px;
+  right: 35px;
+  transform-origin: right bottom;
+  transform: rotate(-5deg);
+  border-radius: 2px;
+}
+
+/* Bicycle handlebar and seat - refined */
+.bicycle-handlebar {
+  position: absolute;
+  left: 40px;
+  top: 15px;
+}
+
+.handlebar-stem {
+  position: absolute;
+  width: 18px;
+  height: 4px;
+  background-color: #333;
+  transform-origin: left center;
+  transform: rotate(-60deg);
+}
+
+.handlebar-grip-left, .handlebar-grip-right {
+  position: absolute;
+  width: 10px;
+  height: 4px;
+  background-color: #333;
+  top: -6px;
+}
+
+.handlebar-grip-left {
+  left: -4px;
+  transform: rotate(45deg);
+}
+
+.handlebar-grip-right {
+  left: 4px;
+  transform: rotate(-45deg);
+}
+
+.bicycle-seat {
+  position: absolute;
+  width: 18px;
+  height: 5px;
+  background-color: #333;
+  top: 15px;
+  left: 108px;
+  border-radius: 3px 5px 3px 3px;
+}
+
+/* Bicycle pedals and chain - smoother */
+.bicycle-crank {
+  position: absolute;
+  bottom: 25px;
+  left: 82px;
+  z-index: 2;
+}
+
+.crank-arm {
+  position: absolute;
+  width: 18px;
+  height: 3px;
+  background-color: #555;
+  transform-origin: left center;
+  animation: pedalRotate 2s linear infinite;
+}
+
+.crank-pedal {
+  position: absolute;
+  width: 10px;
+  height: 4px;
+  background-color: #333;
+  right: -5px;
+  top: -2px;
+  border-radius: 2px;
+  animation: pedalKeepLevel 2s linear infinite;
+}
+
+.bicycle-chain {
+  position: absolute;
+  width: 62px;
+  height: 2px;
+  background-color: #555;
+  bottom: 27px;
+  left: 82px;
+  z-index: 1;
+}
+
+/* Content styling - improved spacing and readability */
+.not-found-title {
+  margin-bottom: 1.5rem;
+}
+
+.not-found-subtitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+
+.not-found-message {
+  font-size: 1.25rem;
+  color: #555;
+  margin-bottom: 2.5rem;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+/* Action buttons - better visual hierarchy */
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 3.5rem;
+}
+
+.not-found-button {
+  padding: 0.875rem 1.75rem;
+  border-radius: 100px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+  letter-spacing: 0.3px;
+}
+
+.not-found-button-primary {
+  background-color: #00b1eb;
+  color: white;
+  border: none;
+}
+
+.not-found-button-primary:hover {
+  background-color: #0090c0;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-3px);
+}
+
+.not-found-button-secondary {
+  background-color: white;
+  color: #00b1eb;
+  border: 2px solid #00b1eb;
+}
+
+.not-found-button-secondary:hover {
+  background-color: rgba(0, 177, 235, 0.08);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+/* Help section - cleaner separation */
+.not-found-help {
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.not-found-help-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.2px;
+}
+
+.not-found-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.not-found-link {
+  display: flex;
+  align-items: center;
+  color: #00b1eb;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+}
+
+.not-found-link:hover {
+  color: #0090c0;
+  transform: translateY(-2px);
+  background-color: rgba(0, 177, 235, 0.05);
+}
+
+.not-found-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: 0.625rem;
+}
+
+/* Animations - smoother and more subtle */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wheelRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pedalRotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes pedalKeepLevel {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+
+@keyframes roadMove {
+  0% { background-position: 0 0; }
+  100% { background-position: -100px 0; }
+}
+
+@keyframes bicycleMove {
+  0% { transform: translateX(-50%) translateY(0); }
+  100% { transform: translateX(-50%) translateY(-2px); }
+}
+
+@keyframes shadowMove {
+  0% { transform: scaleX(1) translateX(0); opacity: 0.2; }
+  100% { transform: scaleX(0.92) translateX(2px); opacity: 0.15; }
+}
+
+@keyframes signBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* Make sure the road sign in the middle keeps its x-position during bounce */
+.road-sign-0 {
+  animation: signBounce0 3.5s ease-in-out infinite;
+}
+
+@keyframes signBounce0 {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* Responsive adjustments - better proportions on all screens */
+@media (max-width: 768px) {
+  .not-found-content {
+    padding: 2rem;
+  }
+  
+  .not-found-illustration {
+    height: 220px;
+    margin-bottom: 2rem;
+  }
+  
+  .not-found-subtitle {
+    font-size: 2rem;
+  }
+  
+  .not-found-message {
+    font-size: 1.125rem;
+    margin-bottom: 2rem;
+  }
+  
+  .road-sign {
+    font-size: 38px;
+    width: 48px;
+    height: 64px;
+  }
+  
+  .not-found-links {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .not-found-container {
+    padding: 1.5rem;
+  }
+  
+  .not-found-content {
+    padding: 1.5rem;
+  }
+  
+  .not-found-illustration {
+    height: 180px;
+    margin-bottom: 1.5rem;
+  }
+  
+  .not-found-subtitle {
+    font-size: 1.75rem;
+  }
+  
+  .not-found-message {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .not-found-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .not-found-button {
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+    padding: 0.75rem 1.5rem;
+  }
+  
+  .road-sign {
+    font-size: 30px;
+    width: 38px;
+    height: 54px;
+  }
+  
+  .road-sign-4-left {
+    left: 15%;
+  }
+  
+  .road-sign-4-right {
+    right: 15%;
+  }
+  
+  .not-found-help {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+  }
+  
+  .not-found-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .not-found-link {
+    width: 100%;
+    justify-content: center;
+    padding: 0.75rem;
+  }
+}
