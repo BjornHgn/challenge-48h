@@ -1,0 +1,84 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f8f9fa; /* Light background to show content is loading */
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Open Sans', sans-serif;
+}
+
+#root {
+  height: 100%;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+/* Custom components */
+.station-card {
+  @apply bg-white rounded-lg shadow-md p-4 transition-all duration-200 hover:shadow-lg;
+}
+
+.station-status-open {
+  @apply bg-emerald-500;
+}
+
+.station-status-closed {
+  @apply bg-neutral-500;
+}
+
+.station-status-maintenance {
+  @apply bg-amber-500;
+}
+
+.bikes-available-high {
+  @apply text-emerald-500;
+}
+
+.bikes-available-medium {
+  @apply text-primary-500;
+}
+
+.bikes-available-low {
+  @apply text-amber-500;
+}
+
+.bikes-available-none {
+  @apply text-secondary-500;
+}
+
+/* Form elements */
+.form-input {
+  @apply w-full border border-neutral-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-neutral-700 mb-1;
+}
+
+.form-error {
+  @apply text-secondary-500 text-sm mt-1;
+}
+
+/* Buttons */
+.btn {
+  @apply px-4 py-2 rounded-lg transition-colors;
+}
+
+.btn-primary {
+  @apply bg-primary-500 text-white hover:bg-primary-600;
+}
+
+.btn-secondary {
+  @apply bg-neutral-100 text-neutral-700 hover:bg-neutral-200;
+}
+
+.btn-danger {
+  @apply bg-secondary-500 text-white hover:bg-secondary-600;
+}
