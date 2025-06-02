@@ -1,29 +1,39 @@
-require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+const { MongoClient } = require('mongodb');
+const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
-// Middleware
-app.use(express.json());
-app.use(cors({
-    origin: process.env.CLIENT_URL,
-    credentials: true
-}));
+// MongoDB connection URI - replace with your actual connection string
+const mongoUri = 'mongodb://localhost:27017';
+const dbName = 'mydatabase';
 
-// Routes (placeholder)
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok' });
-});
+async function startServer() {
+  try {
+    // Connect to MongoDB
+    const client = new MongoClient(mongoUri);
+    await client.connect();
+    console.log('Connected successfully to MongoDB');
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI)
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('MongoDB connection error:', err));
+    // You can use the db object to perform database operations
+    const db = client.db(dbName);
 
-// Start server
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+    // Serve static files from frontend/templates directory
+    app.use(express.static(path.join(__dirname, '../frontend/templates')));
+
+    // Redirect root route to index.html
+    app.get('/', (req, res) => {
+      res.sendFile(path.join(__dirname, '../frontend/templates/index.html'));
+    });
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error('Failed to connect to MongoDB', err);
+    process.exit(1);
+  }
+}
+
+startServer();
