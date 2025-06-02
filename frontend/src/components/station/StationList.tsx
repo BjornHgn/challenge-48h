@@ -21,48 +21,42 @@ const StationList = ({ stations, onStationSelect }: StationListProps) => {
       {stations.map(station => (
         <div 
           key={station._id} 
-          className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg"
+          className="tbm-station-card"
           onClick={() => onStationSelect(station)}
         >
-          <div className="flex items-center mb-2">
-            <div 
-              className={`w-3 h-3 rounded-full mr-2 ${
-                station.status !== 'OPEN' 
-                  ? 'bg-neutral-500' 
-                  : station.availableBikes === 0 
-                  ? 'bg-secondary-500' 
-                  : station.availableBikes < 3 
-                  ? 'bg-amber-500' 
-                  : 'bg-emerald-500'
-              }`} 
-            />
-            <h3 className="text-lg font-bold text-primary-600">{station.name}</h3>
+          <div className="tbm-station-header">
+            <h3 className="tbm-station-name">{station.name}</h3>
+            <span className={`tbm-station-status ${station.status === 'OPEN' ? 'tbm-station-status-open' : 'tbm-station-status-closed'}`}>
+              {station.status}
+            </span>
           </div>
           
-          <p className="text-sm text-neutral-600 mb-3">{station.address}</p>
-          
-          <div className="grid grid-cols-3 gap-2 text-center">
-            <div>
-              <div className="text-xl font-bold text-primary-500">{station.availableBikes}</div>
-              <div className="text-xs text-neutral-500">Bikes</div>
+          <div className="tbm-station-body">
+            <p className="tbm-station-address">{station.address}</p>
+            
+            <div className="tbm-station-availability">
+              <div className="tbm-availability-item">
+                <div className="tbm-availability-value tbm-bikes-value">{station.availableBikes}</div>
+                <div className="tbm-availability-label">Bikes</div>
+              </div>
+              <div className="tbm-availability-item">
+                <div className="tbm-availability-value tbm-ebikes-value">{station.availableEBikes}</div>
+                <div className="tbm-availability-label">E-Bikes</div>
+              </div>
+              <div className="tbm-availability-item">
+                <div className="tbm-availability-value tbm-docks-value">{station.availableDocks}</div>
+                <div className="tbm-availability-label">Docks</div>
+              </div>
             </div>
-            <div>
-              <div className="text-xl font-bold text-secondary-500">{station.availableEBikes}</div>
-              <div className="text-xs text-neutral-500">E-Bikes</div>
+            
+            <div className="tbm-station-actions">
+              <Link 
+                to={`/stations/${station._id}`}
+                className="tbm-btn tbm-btn-primary"
+              >
+                View Details
+              </Link>
             </div>
-            <div>
-              <div className="text-xl font-bold text-neutral-700">{station.availableDocks}</div>
-              <div className="text-xs text-neutral-500">Docks</div>
-            </div>
-          </div>
-          
-          <div className="mt-4">
-            <Link 
-              to={`/stations/${station._id}`}
-              className="block w-full text-center py-2 bg-primary-500 text-white rounded-lg hover:bg-primary-600 transition-colors"
-            >
-              View Details
-            </Link>
           </div>
         </div>
       ))}

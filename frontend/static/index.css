@@ -2,83 +2,360 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --tbm-primary: #00b1eb;
+  --tbm-primary-dark: #0090c0;
+  --tbm-secondary: #ff5c39;
+  --tbm-secondary-dark: #e44320;
+  --tbm-neutral-dark: #333333;
+  --tbm-neutral: #555555;
+  --tbm-neutral-light: #f7f7f7;
+  --tbm-success: #4caf50;
+  --tbm-warning: #ff9800;
+  --tbm-danger: #f44336;
+}
+
 body {
-  background-color: #f8f9fa; /* Light background to show content is loading */
+  background-color: #f8f9fa;
+  font-family: 'Open Sans', sans-serif;
+  color: var(--tbm-neutral);
 }
 
 html, body {
   height: 100%;
   margin: 0;
-  font-family: 'Open Sans', sans-serif;
 }
 
 #root {
   height: 100%;
 }
 
+/* Typography */
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Montserrat', sans-serif;
+  color: var(--tbm-neutral-dark);
+  font-weight: 600;
 }
 
-/* Custom components */
-.station-card {
-  @apply bg-white rounded-lg shadow-md p-4 transition-all duration-200 hover:shadow-lg;
+a {
+  color: var(--tbm-primary);
+  text-decoration: none;
+  transition: color 0.2s;
 }
 
-.station-status-open {
-  @apply bg-emerald-500;
+a:hover {
+  color: var(--tbm-primary-dark);
 }
 
-.station-status-closed {
-  @apply bg-neutral-500;
+/* Layout */
+.tbm-container {
+  @apply container mx-auto px-4 py-5;
+  max-width: 1200px;
 }
 
-.station-status-maintenance {
-  @apply bg-amber-500;
+.tbm-section {
+  @apply py-8;
 }
 
-.bikes-available-high {
-  @apply text-emerald-500;
+/* Header */
+.tbm-header {
+  background-color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.bikes-available-medium {
-  @apply text-primary-500;
+.tbm-logo {
+  height: 40px;
 }
 
-.bikes-available-low {
-  @apply text-amber-500;
+.tbm-nav {
+  @apply flex items-center space-x-6;
 }
 
-.bikes-available-none {
-  @apply text-secondary-500;
+.tbm-nav-item {
+  @apply font-medium text-neutral-700 hover:text-primary-500 transition-colors py-2;
+  font-size: 15px;
 }
 
-/* Form elements */
-.form-input {
-  @apply w-full border border-neutral-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary-500;
+.tbm-nav-item.active {
+  color: var(--tbm-primary);
+  border-bottom: 3px solid var(--tbm-primary);
 }
 
-.form-label {
-  @apply block text-sm font-medium text-neutral-700 mb-1;
+/* Hero Section */
+.tbm-hero {
+  @apply bg-white py-12 md:py-20 relative overflow-hidden;
 }
 
-.form-error {
-  @apply text-secondary-500 text-sm mt-1;
+.tbm-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+  pointer-events: none;
+}
+
+.tbm-hero-content {
+  @apply relative z-10 text-center max-w-4xl mx-auto px-4;
+}
+
+.tbm-hero-title {
+  @apply text-4xl md:text-5xl lg:text-6xl font-bold mb-6;
+  color: var(--tbm-primary);
+}
+
+.tbm-hero-subtitle {
+  @apply text-lg md:text-xl text-neutral-600 mb-8;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Buttons */
-.btn {
-  @apply px-4 py-2 rounded-lg transition-colors;
+.tbm-btn {
+  @apply inline-flex items-center justify-center px-5 py-3 rounded-full font-medium transition-all;
+  font-size: 15px;
 }
 
-.btn-primary {
-  @apply bg-primary-500 text-white hover:bg-primary-600;
+.tbm-btn-primary {
+  background-color: var(--tbm-primary);
+  color: white;
 }
 
-.btn-secondary {
-  @apply bg-neutral-100 text-neutral-700 hover:bg-neutral-200;
+.tbm-btn-primary:hover {
+  background-color: var(--tbm-primary-dark);
+  color: white;
 }
 
-.btn-danger {
-  @apply bg-secondary-500 text-white hover:bg-secondary-600;
+.tbm-btn-secondary {
+  background-color: var(--tbm-secondary);
+  color: white;
+}
+
+.tbm-btn-secondary:hover {
+  background-color: var(--tbm-secondary-dark);
+  color: white;
+}
+
+.tbm-btn-outline {
+  border: 2px solid var(--tbm-primary);
+  color: var(--tbm-primary);
+  background-color: transparent;
+}
+
+.tbm-btn-outline:hover {
+  background-color: var(--tbm-primary);
+  color: white;
+}
+
+/* Cards */
+.tbm-card {
+  @apply bg-white rounded-xl overflow-hidden shadow-md transition-shadow;
+  border: 1px solid #e5e7eb;
+}
+
+.tbm-card:hover {
+  @apply shadow-lg;
+}
+
+.tbm-card-header {
+  @apply p-4 border-b border-gray-100 flex justify-between items-center;
+  background-color: var(--tbm-neutral-light);
+}
+
+.tbm-card-title {
+  @apply text-lg font-semibold;
+  color: var(--tbm-primary);
+}
+
+.tbm-card-body {
+  @apply p-4;
+}
+
+.tbm-card-footer {
+  @apply p-4 border-t border-gray-100;
+  background-color: var(--tbm-neutral-light);
+}
+
+/* Station List */
+.tbm-station-card {
+  @apply rounded-xl overflow-hidden shadow-md transition-all duration-200 mb-4;
+  background-color: white;
+  border-left: 4px solid var(--tbm-primary);
+}
+
+.tbm-station-card:hover {
+  @apply shadow-lg;
+  transform: translateY(-2px);
+}
+
+.tbm-station-header {
+  @apply p-4 flex justify-between items-center border-b border-gray-100;
+  background-color: var(--tbm-neutral-light);
+}
+
+.tbm-station-name {
+  @apply text-lg font-bold;
+  color: var(--tbm-primary);
+}
+
+.tbm-station-status {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+}
+
+.tbm-station-status-open {
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--tbm-success);
+}
+
+.tbm-station-status-closed {
+  background-color: rgba(244, 67, 54, 0.1);
+  color: var(--tbm-danger);
+}
+
+.tbm-station-status-maintenance {
+  background-color: rgba(255, 152, 0, 0.1);
+  color: var(--tbm-warning);
+}
+
+.tbm-station-body {
+  @apply p-4;
+}
+
+.tbm-station-address {
+  @apply text-sm text-neutral-600 mb-4;
+}
+
+.tbm-station-availability {
+  @apply grid grid-cols-3 gap-4 text-center mb-4;
+}
+
+.tbm-availability-item {
+  @apply flex flex-col items-center;
+}
+
+.tbm-availability-value {
+  @apply text-2xl font-bold;
+}
+
+.tbm-availability-label {
+  @apply text-xs text-neutral-500;
+}
+
+.tbm-bikes-value {
+  color: var(--tbm-primary);
+}
+
+.tbm-ebikes-value {
+  color: var(--tbm-secondary);
+}
+
+.tbm-docks-value {
+  color: var(--tbm-neutral);
+}
+
+.tbm-station-actions {
+  @apply flex items-center justify-between mt-4;
+}
+
+/* Forms */
+.tbm-form-group {
+  @apply mb-4;
+}
+
+.tbm-form-label {
+  @apply block text-sm font-medium text-neutral-700 mb-1;
+}
+
+.tbm-form-input {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 transition-all;
+  background-color: white;
+}
+
+.tbm-form-input:focus {
+  @apply border-primary-300;
+  box-shadow: 0 0 0 3px rgba(0, 177, 235, 0.1);
+}
+
+.tbm-form-error {
+  @apply mt-1 text-sm text-red-600;
+}
+
+/* Search Bar */
+.tbm-search {
+  @apply relative rounded-full overflow-hidden shadow-sm;
+  background-color: white;
+  border: 1px solid #e5e7eb;
+}
+
+.tbm-search-input {
+  @apply w-full pl-10 pr-4 py-3 outline-none;
+  background-color: transparent;
+}
+
+.tbm-search-icon {
+  @apply absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400;
+}
+
+/* Map */
+.tbm-map-container {
+  @apply rounded-xl overflow-hidden shadow-md;
+  height: 500px;
+}
+
+/* Footer */
+.tbm-footer {
+  @apply py-8;
+  background-color: var(--tbm-neutral-dark);
+  color: white;
+}
+
+.tbm-footer-content {
+  @apply container mx-auto px-4 grid gap-8 md:grid-cols-4;
+}
+
+.tbm-footer-column {
+  @apply flex flex-col;
+}
+
+.tbm-footer-title {
+  @apply text-lg font-semibold mb-4 text-white;
+}
+
+.tbm-footer-link {
+  @apply text-gray-300 hover:text-white transition-colors mb-2;
+}
+
+.tbm-footer-bottom {
+  @apply container mx-auto px-4 pt-6 mt-6 border-t border-gray-700 text-center text-gray-400 text-sm;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tbm-hero-title {
+    @apply text-3xl;
+  }
+  
+  .tbm-nav {
+    @apply space-x-3;
+  }
+  
+  .tbm-nav-item {
+    font-size: 14px;
+  }
+  
+  .tbm-footer-content {
+    @apply grid-cols-2;
+  }
+}
+
+@media (max-width: 640px) {
+  .tbm-footer-content {
+    @apply grid-cols-1;
+  }
 }
