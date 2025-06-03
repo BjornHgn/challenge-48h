@@ -41,7 +41,7 @@ const HomePage = () => {
       <header className="header">
         <div className="header-container">
           <Link to="/" className="flex items-center">
-            <img src="/logo.png" alt="VCub" className="logo" />
+            <img src="logo.svg" alt="TBM" className="logo" />
           </Link>
           
           <nav className="nav-links">
@@ -63,7 +63,7 @@ const HomePage = () => {
         <section className="hero-section">
           <div className="tbm-container hero-content">
             <h1 className="hero-title animate-fadeInUp">
-              <span className="text-white">VCub</span> Station Tracker
+              <span className="text-white">TBM</span> Station Tracker
             </h1>
             <p className="hero-subtitle animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
               Trouvez des vélos disponibles dans les stations VCub à Bordeaux en temps réel.
@@ -184,7 +184,7 @@ const HomePage = () => {
           </div>
           
           <div className="footer-bottom">
-            <p>&copy; 2024 VCub. Tous droits réservés.</p>
+            <p>&copy; 2025 TBM. Tous droits réservés.</p>
           </div>
         </div>
       </footer>
