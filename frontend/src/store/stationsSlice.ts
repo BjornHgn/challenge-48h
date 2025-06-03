@@ -1,25 +1,20 @@
-import { createSlice, createAsyncThunk, createSelector } from '@reduxjs/toolkit';
-import { stationsApi } from '../services/api';
-import { Station } from '../types/station';
-import { RootState } from '../store';
+import { createSlice, createAsyncThunk, createEntityAdapter, createSelector } from '@reduxjs/toolkit';
+import { stationService } from '../services/station.service';
+import { Station, StationFilters } from '../types/station';
+import { RootState } from './index';
 
-interface StationsState {
-  stations: Record<string, Station>;
-  loading: boolean;
-  error: string | null;
-}
+// Create adapter for normalized state
+const stationsAdapter = createEntityAdapter<Station>({
+  selectId: (station) => station._id,
+  sortComparer: (a, b) => a.name.localeCompare(b.name),
+});
 
-const initialState: StationsState = {
-  stations: {},
-  loading: false,
-  error: null,
-};
-
+// Async thunks
 export const fetchStations = createAsyncThunk(
   'stations/fetchAll',
-  async (_, { rejectWithValue }) => {
+  async (filters?: StationFilters, { rejectWithValue }) => {
     try {
-      const response = await stationsApi.getAll();
+      const response = await stationService.getAllStations(filters);
       return response.stations;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch stations');
@@ -29,10 +24,9 @@ export const fetchStations = createAsyncThunk(
 
 export const fetchStationById = createAsyncThunk(
   'stations/fetchById',
-  async (stationId: string, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue }) => {
     try {
-      const response = await stationsApi.getById(stationId);
-      return response;
+      return await stationService.getStationById(id);
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch station');
     }
@@ -41,28 +35,39 @@ export const fetchStationById = createAsyncThunk(
 
 export const fetchNearbyStations = createAsyncThunk(
   'stations/fetchNearby',
-  async (
-    { longitude, latitude, distance }: { longitude: number; latitude: number; distance?: number },
-    { rejectWithValue }
-  ) => {
+  async ({ longitude, latitude, distance }: { longitude: number; latitude: number; distance?: number }, { rejectWithValue }) => {
     try {
-      const response = await stationsApi.getNearby(longitude, latitude, distance);
-      return response;
+      return await stationService.getNearbyStations(longitude, latitude, distance);
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch nearby stations');
     }
   }
 );
 
+export const fetchFavoriteStations = createAsyncThunk(
+  'stations/fetchFavorites',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await stationService.getFavoriteStations();
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to fetch favorite stations');
+    }
+  }
+);
+
+// Create slice
 const stationsSlice = createSlice({
   name: 'stations',
-  initialState,
+  initialState: stationsAdapter.getInitialState({
+    loading: false,
+    error: null as string | null,
+    selectedStationId: null as string | null,
+  }),
   reducers: {
-    updateStation: (state, action) => {
-      const { _id, ...stationData } = action.payload;
-      if (state.stations[_id]) {
-        state.stations[_id] = { ...state.stations[_id], ...stationData };
-      }
+    // For WebSocket updates
+    stationUpdated: stationsAdapter.updateOne,
+    selectStation: (state, action) => {
+      state.selectedStationId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -73,27 +78,23 @@ const stationsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchStations.fulfilled, (state, action) => {
+        stationsAdapter.setAll(state, action.payload);
         state.loading = false;
-        // Convert array to object with IDs as keys
-        const stationsMap = action.payload.reduce((acc, station) => {
-          acc[station._id] = station;
-          return acc;
-        }, {} as Record<string, Station>);
-        state.stations = stationsMap;
       })
       .addCase(fetchStations.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       })
       
-      // Fetch station by ID
+      // Fetch single station
       .addCase(fetchStationById.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchStationById.fulfilled, (state, action) => {
+        stationsAdapter.upsertOne(state, action.payload);
+        state.selectedStationId = action.payload._id;
         state.loading = false;
-        state.stations[action.payload._id] = action.payload;
       })
       .addCase(fetchStationById.rejected, (state, action) => {
         state.loading = false;
@@ -106,13 +107,24 @@ const stationsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchNearbyStations.fulfilled, (state, action) => {
+        stationsAdapter.upsertMany(state, action.payload);
         state.loading = false;
-        // Add stations to state
-        action.payload.forEach((station: Station) => {
-          state.stations[station._id] = station;
-        });
       })
       .addCase(fetchNearbyStations.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      
+      // Fetch favorite stations
+      .addCase(fetchFavoriteStations.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchFavoriteStations.fulfilled, (state, action) => {
+        stationsAdapter.upsertMany(state, action.payload);
+        state.loading = false;
+      })
+      .addCase(fetchFavoriteStations.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -120,11 +132,22 @@ const stationsSlice = createSlice({
 });
 
 // Selectors
-export const selectAllStations = (stations: Record<string, Station>) => 
-  Object.values(stations);
+export const {
+  selectAll: selectAllStations,
+  selectById: selectStationById,
+  selectIds: selectStationIds,
+} = stationsAdapter.getSelectors((state: RootState) => state.stations);
 
-export const selectStationById = (state: RootState, stationId: string) => 
-  state.stations.stations[stationId];
+// Selected station selector
+export const selectSelectedStation = createSelector(
+  [(state: RootState) => state.stations.selectedStationId, selectAllStations],
+  (selectedId, stations) => {
+    if (!selectedId) return null;
+    return stations.find(station => station._id === selectedId) || null;
+  }
+);
 
-export const { updateStation } = stationsSlice.actions;
+// Export actions
+export const { stationUpdated, selectStation } = stationsSlice.actions;
+
 export default stationsSlice.reducer;

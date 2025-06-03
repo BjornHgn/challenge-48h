@@ -1,8 +1,10 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from './store';
 import { checkAuth } from './store/authSlice';
-import { AppDispatch, RootState } from './store';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import socketService from './services/socket.service';
 
 // Layouts
 import MainLayout from './layouts/MainLayout';
@@ -13,68 +15,55 @@ import HomePage from './pages/HomePage';
 import MapPage from './pages/MapPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import StationDetailPage from './pages/StationDetailPage';
 import FavoritesPage from './pages/FavoritesPage';
 import ProfilePage from './pages/ProfilePage';
-import StationDetailPage from './pages/StationDetailPage';
 import NotFoundPage from './pages/NotFoundPage';
-
-// Protected route component
-const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
-  const { isAuthenticated, loading } = useSelector((state: RootState) => state.auth);
-  
-  if (loading) {
-    return <div className="flex h-screen items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-500"></div>
-    </div>;
-  }
-  
-  if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
-  }
-  
-  return <>{children}</>;
-};
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
   
   useEffect(() => {
+    // Check authentication status
     dispatch(checkAuth());
+    
+    // Connect to WebSocket
+    socketService.connect();
+    
+    // Cleanup on unmount
+    return () => {
+      socketService.disconnect();
+    };
   }, [dispatch]);
   
   return (
-    <Router>
+    <BrowserRouter>
       <Routes>
-        {/* Root redirect to homepage */}
-        <Route path="" element={<Navigate to="/" replace />} />
-        
         {/* Public routes */}
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<HomePage />} />
-          <Route path="map" element={<MapPage />} />
-          <Route path="stations/:id" element={<StationDetailPage />} />
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/map" element={<MapPage />} />
+          <Route path="/stations/:id" element={<StationDetailPage />} />
         </Route>
         
         {/* Auth routes */}
-        <Route path="/" element={<AuthLayout />}>
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+        <Route element={<AuthLayout />}>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Route>
         
         {/* Protected routes */}
-        <Route path="/" element={
-          <ProtectedRoute>
-            <MainLayout />
-          </ProtectedRoute>
-        }>
-          <Route path="favorites" element={<FavoritesPage />} />
-          <Route path="profile" element={<ProfilePage />} />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<MainLayout />}>
+            <Route path="/favorites" element={<FavoritesPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+          </Route>
         </Route>
         
-        {/* 404 route */}
+        {/* Handle 404 */}
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </Router>
+    </BrowserRouter>
   );
 }
 

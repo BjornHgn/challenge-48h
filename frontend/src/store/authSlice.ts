@@ -1,26 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authApi } from '../services/api';
-
-interface AuthState {
-  isAuthenticated: boolean;
-  user: any | null;
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: AuthState = {
-  isAuthenticated: false,
-  user: null,
-  loading: false,
-  error: null,
-};
+import { authService } from '../services/auth.service';
 
 export const login = createAsyncThunk(
   'auth/login',
-  async (credentials: { email: string; password: string }, { rejectWithValue }) => {
+  async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await authApi.login(credentials);
-      return response;
+      return await authService.login(email, password);
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
@@ -29,10 +14,9 @@ export const login = createAsyncThunk(
 
 export const register = createAsyncThunk(
   'auth/register',
-  async (userData: { email: string; username: string; password: string }, { rejectWithValue }) => {
+  async ({ username, email, password }: { username: string; email: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await authApi.register(userData);
-      return response;
+      return await authService.register(username, email, password);
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Registration failed');
     }
@@ -40,13 +24,12 @@ export const register = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk('auth/logout', async () => {
-  await authApi.logout();
+  await authService.logout();
 });
 
 export const checkAuth = createAsyncThunk('auth/check', async (_, { rejectWithValue }) => {
   try {
-    const response = await authApi.getProfile();
-    return response;
+    return await authService.getCurrentUser();
   } catch (error) {
     return rejectWithValue('Not authenticated');
   }
@@ -54,7 +37,12 @@ export const checkAuth = createAsyncThunk('auth/check', async (_, { rejectWithVa
 
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: {
+    user: null,
+    isAuthenticated: false,
+    loading: true,
+    error: null,
+  },
   reducers: {
     clearError: (state) => {
       state.error = null;
@@ -68,13 +56,14 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(login.fulfilled, (state, action) => {
-        state.loading = false;
+        state.user = action.payload;
         state.isAuthenticated = true;
-        state.user = action.payload.user;
+        state.loading = false;
       })
       .addCase(login.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload as string;
+        state.loading = false;
+        state.isAuthenticated = false;
       })
       
       // Register
@@ -83,19 +72,19 @@ const authSlice = createSlice({
         state.error = null;
       })
       .addCase(register.fulfilled, (state, action) => {
-        state.loading = false;
+        state.user = action.payload;
         state.isAuthenticated = true;
-        state.user = action.payload.user;
+        state.loading = false;
       })
       .addCase(register.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.payload as string;
+        state.loading = false;
       })
       
       // Logout
       .addCase(logout.fulfilled, (state) => {
-        state.isAuthenticated = false;
         state.user = null;
+        state.isAuthenticated = false;
       })
       
       // Check Auth
@@ -103,13 +92,14 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
-        state.loading = false;
-        state.isAuthenticated = true;
         state.user = action.payload;
+        state.isAuthenticated = true;
+        state.loading = false;
       })
       .addCase(checkAuth.rejected, (state) => {
-        state.loading = false;
+        state.user = null;
         state.isAuthenticated = false;
+        state.loading = false;
       });
   },
 });
