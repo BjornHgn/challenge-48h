@@ -10,6 +10,9 @@ import rateLimit from 'express-rate-limit';
 async function bootstrap() {
     const app = await NestFactory.create(AppModule);
 
+  // Log CLIENT_URL environment variable for verification
+    console.log('CLIENT_URL environment variable:', process.env.CLIENT_URL);
+
   // Security middleware
     app.use(helmet());
     app.use(compression());
