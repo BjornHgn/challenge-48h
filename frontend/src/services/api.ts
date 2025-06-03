@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { Station } from '../types/station';
 
-// Use localhost for authentication operations
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const API_URL = 'http://10.33.70.223:3000/docs/';
 
 // Create axios instance with proper configuration
 const api = axios.create({
