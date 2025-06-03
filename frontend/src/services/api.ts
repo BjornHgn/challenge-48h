@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Station } from '../types/station';
 import { User } from '../types/user';
 
-const API_URL = '/api';
+const API_URL = 'http://10.33.70.223:3000/docs/';
 
 // Create axios instance
 const api = axios.create({
