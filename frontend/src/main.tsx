@@ -5,6 +5,7 @@ import App from './App';
 import { store } from './store';
 import '../static/index.css';
 import '../static/HomePage.css'; // Add this line
+import '../static/LoginRegister.css'; // Add this line
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

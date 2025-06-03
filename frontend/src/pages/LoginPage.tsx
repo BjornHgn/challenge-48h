@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { login } from '../store/authSlice';
 import { AppDispatch, RootState } from '../store';
+import '../../static/LoginRegister.css';
 
 const LoginPage = () => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state: RootState) => state.auth);
-  
+
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -20,7 +21,7 @@ const LoginPage = () => {
       await dispatch(login(formData)).unwrap();
       navigate('/');
     } catch (error) {
-      // Error is handled by the reducer
+      // Error handled in reducer
     }
   };
 
@@ -32,56 +33,58 @@ const LoginPage = () => {
   };
 
   return (
-    <>
-      <h2 className="text-2xl font-bold text-center mb-6">Login</h2>
-      
+    <div className="login-container">
+      <h2 className="login-title">Connectez-vous avec<br />votre compte TBM !</h2>
+
       {error && (
-        <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
+        <div className="error-message">
           {error}
         </div>
       )}
-      
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="form-label">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="form-input"
-            required
-          />
+
+      <form onSubmit={handleSubmit} className="login-form">
+        <label htmlFor="email" className="form-label">Adresse mail</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          placeholder="ex: johndoe@example.com"
+          value={formData.email}
+          onChange={handleChange}
+          className="form-input"
+          required
+        />
+
+        <label htmlFor="password" className="form-label">Mot de passe</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="••••••••"
+          value={formData.password}
+          onChange={handleChange}
+          className="form-input"
+          required
+        />
+
+        <div className="login-links">
+          <Link to="/forgot-password">Mot de passe oublié ?</Link>
+          <Link to="/register">Créer mon compte</Link>
         </div>
-        
-        <div>
-          <label className="form-label">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="form-input"
-            required
-          />
-        </div>
-        
+
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-primary-500 text-white py-2 rounded-lg hover:bg-primary-600 disabled:opacity-50"
+          className="login-button"
         >
-          {loading ? 'Logging in...' : 'Login'}
+          {loading ? 'Connexion...' : 'Se connecter'}
         </button>
       </form>
-      
-      <p className="text-center mt-4">
-        Don't have an account?{' '}
-        <Link to="/register" className="text-primary-500 hover:underline">
-          Sign up
-        </Link>
+
+      <p className="privacy-notice">
+        Les données personnelles sont recueillies pour le traitement de votre demande par TBM (exploité par Keolis Bordeaux Métropole Mobilités pour le compte de Bordeaux Métropole). Vous disposez d’un droit d’accès, de modification, de rectification, de limitation, d’opposition, de suppression des données vous concernant auprès de TBM, de réclamation auprès de la CNIL. Tous les détails du traitement de vos données personnelles et de vos droits sont disponibles à la rubrique « Politique de confidentialité » en pied de page du site infotbm.com.
       </p>
-    </>
+    </div>
   );
 };
 
