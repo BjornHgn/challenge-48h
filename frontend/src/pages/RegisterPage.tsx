@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store';
-import { register as registerUser } from '../../store/authSlice';
+import { AppDispatch } from '../store';
+import { register as registerUser } from '../store/authSlice.ts';
 import '../../static/LoginRegister.css';
 
 const RegisterPage = () => {
