@@ -1,23 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { stationsApi } from '../services/api';
+import { stationService } from '../services/station.service'; // Changed from stationsApi import
 
-interface UserState {
-  favoriteStations: string[];
-  loading: boolean;
-  error: string | null;
-}
-
-const initialState: UserState = {
-  favoriteStations: [],
+// Define initial state
+const initialState = {
+  favoriteStations: [] as string[],
   loading: false,
-  error: null,
+  error: null as string | null
 };
 
+// Update all references in the thunks
 export const fetchFavoriteStations = createAsyncThunk(
   'user/fetchFavorites',
   async (_, { rejectWithValue }) => {
     try {
-      const stations = await stationsApi.getFavorites();
+      const stations = await stationService.getFavoriteStations(); // Changed from stationsApi
       return stations.map(station => station._id);
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to fetch favorites');
@@ -29,7 +25,7 @@ export const addToFavorites = createAsyncThunk(
   'user/addToFavorites',
   async (stationId: string, { rejectWithValue }) => {
     try {
-      await stationsApi.addToFavorites(stationId);
+      await stationService.addToFavorites(stationId); // Changed from stationsApi
       return stationId;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to add to favorites');
@@ -41,7 +37,7 @@ export const removeFromFavorites = createAsyncThunk(
   'user/removeFromFavorites',
   async (stationId: string, { rejectWithValue }) => {
     try {
-      await stationsApi.removeFromFavorites(stationId);
+      await stationService.removeFromFavorites(stationId); // Changed from stationsApi
       return stationId;
     } catch (error: any) {
       return rejectWithValue(error.response?.data?.message || 'Failed to remove from favorites');

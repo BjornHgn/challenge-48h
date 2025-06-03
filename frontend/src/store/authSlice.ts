@@ -1,13 +1,18 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { authService } from '../services/auth.service';
+import { authApi } from '../services/api';
 
+// Update thunks to use authApi
 export const login = createAsyncThunk(
   'auth/login',
   async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      return await authService.login(email, password);
+      const { user, accessToken } = await authApi.login(email, password);
+      return user;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Login failed');
+      if (error.response) {
+        return rejectWithValue(error.response.data.message || 'Login failed');
+      }
+      return rejectWithValue('Connection error. Please try again.');
     }
   }
 );
@@ -16,24 +21,43 @@ export const register = createAsyncThunk(
   'auth/register',
   async ({ username, email, password }: { username: string; email: string; password: string }, { rejectWithValue }) => {
     try {
-      return await authService.register(username, email, password);
+      const { user, accessToken } = await authApi.register(username, email, password);
+      return user;
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'Registration failed');
+      console.error('Registration error:', error);
+      
+      if (error.response) {
+        // Server responded with an error
+        const message = error.response.data.message;
+        if (Array.isArray(message)) {
+          return rejectWithValue(message.join(', '));
+        }
+        return rejectWithValue(message || 'Registration failed');
+      }
+      
+      // Network error or other issues
+      return rejectWithValue('Connection error. Please check your internet connection.');
     }
   }
 );
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout();
-});
-
-export const checkAuth = createAsyncThunk('auth/check', async (_, { rejectWithValue }) => {
-  try {
-    return await authService.getCurrentUser();
-  } catch (error) {
-    return rejectWithValue('Not authenticated');
+export const logout = createAsyncThunk(
+  'auth/logout', 
+  async () => {
+    await authApi.logout();
   }
-});
+);
+
+export const checkAuth = createAsyncThunk(
+  'auth/check',
+  async (_, { rejectWithValue }) => {
+    try {
+      return await authApi.getCurrentUser();
+    } catch (error) {
+      return rejectWithValue('Not authenticated');
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: 'auth',

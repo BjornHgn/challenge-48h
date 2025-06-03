@@ -9,6 +9,13 @@ export const store = configureStore({
     stations: stationsReducer,
     user: userReducer,
   },
+  middleware: (getDefaultMiddleware) => 
+    getDefaultMiddleware({
+      serializableCheck: {
+        // Ignore these action types for non-serializable values
+        ignoredActions: ['auth/login/fulfilled', 'auth/register/fulfilled'],
+      },
+    }),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

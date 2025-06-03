@@ -5,7 +5,6 @@ import App from './App';
 import { store } from './store';
 import '../static/index.css';
 import '../static/HomePage.css';
-// Fix merge conflict by including both CSS files
 import '../static/LoginRegister.css';
 import '../static/NotFoundPage.css';
 

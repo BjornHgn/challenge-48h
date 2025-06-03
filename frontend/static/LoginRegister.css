@@ -83,3 +83,36 @@ button:hover {
   color: #777777;
   line-height: 1.5;
 }
+/* Add this to your CSS file if not already present */
+.error-message {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-size: 0.9em;
+  border-left: 4px solid #c62828;
+}
+
+.login-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #00b1eb;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.login-button:hover {
+  background-color: #0090c0;
+}
+
+.login-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}

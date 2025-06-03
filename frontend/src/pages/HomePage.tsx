@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
+import AuthStatus from '../components/AuthStatus';
 
 const HomePage = () => {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
@@ -47,6 +48,7 @@ const HomePage = () => {
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               <span className="text-[#00b1eb]">VCub</span> Station Tracker
             </h1>
+                  <AuthStatus />
             <p className="text-xl mb-8">
               Trouvez des vélos disponibles dans les stations VCub à Bordeaux en temps réel.
             </p>

@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../store';
-import { register as registerUser } from '../store/authSlice.ts';
-import '../../static/LoginRegister.css';
+import { register as registerUser } from '../store/authSlice';
 
 const RegisterPage = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -17,6 +16,7 @@ const RegisterPage = () => {
   });
 
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -25,14 +25,61 @@ const RegisterPage = () => {
     }));
   };
 
+  // Validate password against backend requirements
+  const validatePassword = (password: string) => {
+    if (password.length < 8) {
+      return "Le mot de passe doit contenir au moins 8 caractères.";
+    }
+    
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasLowercase = /[a-z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const hasSpecialChar = /[@$!%*?&]/.test(password);
+    
+    if (!hasUppercase || !hasLowercase || !hasDigit || !hasSpecialChar) {
+      return "Le mot de passe doit contenir au moins une lettre majuscule, une minuscule, un chiffre et un caractère spécial (@$!%*?&).";
+    }
+    
+    return null;
+  };
+
+  // Validate username against backend requirements
+  const validateUsername = (username: string) => {
+    if (username.length < 3 || username.length > 30) {
+      return "Le nom d'utilisateur doit contenir entre 3 et 30 caractères.";
+    }
+    
+    if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+      return "Le nom d'utilisateur ne peut contenir que des lettres, chiffres, tirets et underscores.";
+    }
+    
+    return null;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    
+    // Validate username
+    const usernameError = validateUsername(formData.username);
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
+    
+    // Validate password
+    const passwordError = validatePassword(formData.password);
+    if (passwordError) {
+      setError(passwordError);
+      return;
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError("Les mots de passe ne correspondent pas.");
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       await dispatch(registerUser({
@@ -40,9 +87,18 @@ const RegisterPage = () => {
         username: formData.username,
         password: formData.password,
       })).unwrap();
+      
+      // Registration successful
       navigate('/');
     } catch (err: any) {
-      setError(err.message || 'Erreur lors de la création du compte.');
+      console.error('Registration error:', err);
+      const errorMessage = typeof err === 'string' 
+        ? err 
+        : err.message || 'Erreur lors de la création du compte.';
+      
+      setError(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -57,6 +113,7 @@ const RegisterPage = () => {
       )}
 
       <form onSubmit={handleSubmit} className="login-form">
+        {/* Email input */}
         <label htmlFor="email" className="form-label">Adresse mail</label>
         <input
           type="email"
@@ -69,6 +126,7 @@ const RegisterPage = () => {
           required
         />
 
+        {/* Username input */}
         <label htmlFor="username" className="form-label">Nom d'utilisateur</label>
         <input
           type="text"
@@ -81,6 +139,7 @@ const RegisterPage = () => {
           required
         />
 
+        {/* Password input */}
         <label htmlFor="password" className="form-label">Mot de passe</label>
         <input
           type="password"
@@ -93,6 +152,7 @@ const RegisterPage = () => {
           required
         />
 
+        {/* Confirm password input */}
         <label htmlFor="confirmPassword" className="form-label">Confirmer le mot de passe</label>
         <input
           type="password"
@@ -104,9 +164,17 @@ const RegisterPage = () => {
           className="form-input"
           required
         />
+        <div className="text-xs text-gray-500 mt-1 mb-3">
+          Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule,
+          un chiffre et un caractère spécial (@$!%*?&).
+        </div>
 
-        <button type="submit" className="login-button">
-          Créer mon compte
+        <button 
+          type="submit" 
+          className="login-button"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? 'Création en cours...' : 'Créer mon compte'}
         </button>
       </form>
 
@@ -115,10 +183,6 @@ const RegisterPage = () => {
         <Link to="/login" className="text-primary-500 hover:underline">
           Se connecter
         </Link>
-      </p>
-
-      <p className="privacy-notice">
-        Les données personnelles sont recueillies pour le traitement de votre demande par TBM (exploité par Keolis Bordeaux Métropole Mobilités pour le compte de Bordeaux Métropole). Vous disposez d’un droit d’accès, de modification, de rectification, de limitation, d’opposition, de suppression des données vous concernant auprès de TBM, de réclamation auprès de la CNIL. Tous les détails du traitement de vos données personnelles et de vos droits sont disponibles à la rubrique « Politique de confidentialité » en pied de page du site infotbm.com.
       </p>
     </div>
   );
