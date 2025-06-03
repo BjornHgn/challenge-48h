@@ -85,13 +85,15 @@ function App() {
         </Route>
         
         {/* Protected routes */}
-        <Route path="/favorites" element={
-          <ProtectedRoute>
-            <MainLayout>
-              <FavoritesPage />
-            </MainLayout>
-          </ProtectedRoute>
-        } />
+        <Route
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route path="/favorites" element={<FavoritesPage />} />
+        </Route>
         
         {/* 404 route */}
         <Route path="*" element={<NotFoundPage />} />

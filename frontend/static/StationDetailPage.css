@@ -1,0 +1,209 @@
+/* Station Detail Page Styles - TBM Theme */
+
+/* Breadcrumb styling */
+.text-sm.text-gray-500.mb-6 a {
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.text-sm.text-gray-500.mb-6 a:hover {
+  color: #0090c0;
+}
+
+.text-sm.text-gray-500.mb-6 a:after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: #00b1eb;
+  transition: width 0.3s ease;
+}
+
+.text-sm.text-gray-500.mb-6 a:hover:after {
+  width: 100%;
+}
+
+/* Station header animations */
+.text-3xl.font-bold.text-\[\#333333\] {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.text-gray-600.mt-1 {
+  animation: fadeInUp 0.5s ease-out 0.1s both;
+}
+
+/* Card animations and effects */
+.bg-white.rounded-lg.shadow-md.overflow-hidden {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  transform: translateY(0);
+}
+
+.bg-white.rounded-lg.shadow-md.overflow-hidden:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1), 0 6px 6px rgba(0,0,0,0.1);
+}
+
+/* Card headers */
+.bg-\[\#00b1eb\].text-white.p-4 {
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-\[\#00b1eb\].text-white.p-4:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  z-index: 1;
+}
+
+.bg-\[\#00b1eb\].text-white.p-4 h2 {
+  position: relative;
+  z-index: 2;
+}
+
+/* Availability values */
+.text-3xl.font-bold.text-\[\#00b1eb\],
+.text-3xl.font-bold.text-\[\#ff5c39\],
+.text-3xl.font-bold.text-gray-700 {
+  transition: all 0.3s ease;
+}
+
+.text-3xl.font-bold.text-\[\#00b1eb\]:hover,
+.text-3xl.font-bold.text-\[\#ff5c39\]:hover,
+.text-3xl.font-bold.text-gray-700:hover {
+  transform: scale(1.1);
+}
+
+/* Occupancy bar */
+.bg-\[\#00b1eb\].h-2\.5.rounded-full {
+  transition: width 0.8s ease;
+  background: linear-gradient(90deg, #00b1eb 0%, #0090c0 100%);
+}
+
+/* Rating stars effect */
+.focus\:outline-none:focus {
+  outline: none;
+}
+
+.text-yellow-400 svg,
+.text-gray-300 svg {
+  transition: all 0.2s ease;
+}
+
+.focus\:outline-none:hover svg {
+  transform: scale(1.2);
+}
+
+/* Direction and Map buttons */
+.bg-\[\#00b1eb\].text-white.rounded-lg,
+.px-6.py-3.bg-\[\#00b1eb\].text-white.rounded-full,
+.px-4.py-2.bg-\[\#00b1eb\].text-white.rounded-md {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.bg-\[\#00b1eb\].text-white.rounded-lg:hover,
+.px-6.py-3.bg-\[\#00b1eb\].text-white.rounded-full:hover,
+.px-4.py-2.bg-\[\#00b1eb\].text-white.rounded-md:hover {
+  background-color: #0090c0;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.bg-\[\#00b1eb\].text-white.rounded-lg:after,
+.px-6.py-3.bg-\[\#00b1eb\].text-white.rounded-full:after,
+.px-4.py-2.bg-\[\#00b1eb\].text-white.rounded-md:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 100%);
+  transition: all 0.5s ease;
+}
+
+.bg-\[\#00b1eb\].text-white.rounded-lg:hover:after,
+.px-6.py-3.bg-\[\#00b1eb\].text-white.rounded-full:hover:after,
+.px-4.py-2.bg-\[\#00b1eb\].text-white.rounded-md:hover:after {
+  left: 100%;
+}
+
+/* Heart icon animation */
+.h-6.w-6.text-red-500,
+.h-6.w-6.text-gray-400 {
+  transition: all 0.3s ease;
+}
+
+.h-6.w-6.text-gray-400:hover {
+  transform: scale(1.2);
+}
+
+/* Status indicators */
+.w-4.h-4.rounded-full {
+  transition: all 0.3s ease;
+}
+
+/* Map container */
+.h-64 {
+  border-radius: 0 0 0.5rem 0.5rem;
+  overflow: hidden;
+}
+
+/* Comment textarea focus */
+.w-full.px-3.py-2.border.border-gray-300.rounded-md:focus {
+  border-color: #00b1eb;
+  box-shadow: 0 0 0 3px rgba(0, 177, 235, 0.2);
+}
+
+/* Loading animation */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .md\:grid-cols-3 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .md\:grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .md\:flex-row {
+    flex-direction: column;
+  }
+  
+  .mt-4.md\:mt-0 {
+    margin-top: 1rem;
+  }
+}
