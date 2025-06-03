@@ -12,6 +12,8 @@ async function bootstrap() {
 
   // Log CLIENT_URL environment variable for verification
     console.log('CLIENT_URL environment variable:', process.env.CLIENT_URL);
+    console.log('CORS Origin:', process.env.CLIENT_URL);
+
 
   // Security middleware
     app.use(helmet());
